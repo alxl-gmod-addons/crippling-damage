@@ -1,7 +1,7 @@
 CrippleDmg = CrippleDmg or {}
 CrippleDmg.Thresholds = CrippleDmg.Thresholds or {}
 
-CreateConVar("crippledmg_file", "crippledmg_thresholds.json", nil,
+CreateConVar("crippledmg_file", "crippledmg_thresholds.txt", nil,
     "The location of the file for thresholds when saved/loaded")
 CreateConVar("crippledmg_as_percentage", "1", FCVAR_ARCHIVE,
     "0=raw hp, 1=hp percentage", 0, 1)
