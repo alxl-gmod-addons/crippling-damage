@@ -1,0 +1,14 @@
+{
+    "title": "Crippling Damage",
+    "description": "",
+    "type": "effects",
+    "tags": [
+        "roleplay",
+        "realism"
+    ],
+    "ignore": [
+        ".git/*",
+        "README.md",
+        "LICENSE"
+    ]
+}
