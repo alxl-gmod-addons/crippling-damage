@@ -3,8 +3,7 @@ CrippleDmg.Thresholds = CrippleDmg.Thresholds or {}
 
 CreateConVar("crippledmg_file", "crippledmg_thresholds.txt", nil,
     "The location of the file for thresholds when saved/loaded")
-CreateConVar("crippledmg_as_percentage", "1", FCVAR_ARCHIVE,
-    "0=raw hp, 1=hp percentage", 0, 1)
+CreateConVar("crippledmg_as_percentage", "1", FCVAR_ARCHIVE, "0=raw hp, 1=hp percentage", 0, 1)
 
 concommand.Add("crippledmg_thresholds_list", function(ply, cmd, args)
     print("hp\tmult")
@@ -14,14 +13,29 @@ concommand.Add("crippledmg_thresholds_list", function(ply, cmd, args)
 end)
 
 concommand.Add("crippledmg_thresholds_set", function(ply, cmd, args)
-    CrippleDmg.SetThreshold(args[1], args[2])
-    CrippleDmg.SortThresholds()
-    CrippleDmg.SaveThresholds()
+    local h = tonumber(args[1])
+    local m = tonumber(args[2])
+    if h ~= nil and m ~= nil then
+        CrippleDmg.SetThreshold(h, m)
+        CrippleDmg.SortThresholds()
+        CrippleDmg.SaveThresholds()
+    else
+        print("crippledmg_thresholds_set <HP> <SpeedMult>")
+        print("Adds or sets a damage threshold")
+        print("HP and SpeedMult must both be numbers")
+    end
 end)
 
 concommand.Add("crippledmg_thresholds_remove", function(ply, cmd, args)
-    CrippleDmg.DeleteThreshold(args[1])
-    CrippleDmg.SaveThresholds()
+    local h = tonumber(args[1])
+    if h ~= nil then
+        CrippleDmg.DeleteThreshold(h)
+        CrippleDmg.SaveThresholds()
+    else
+        print("crippledmg_thresholds_remove <HP>")
+        print("Removes a damage threshold")
+        print("HP must be a number")
+    end
 end)
 
 concommand.Add("crippledmg_thresholds_reload", function(ply, cmd, args)
@@ -43,6 +57,7 @@ CrippleDmg.DeleteThreshold = function(hp)
     for i, v in ipairs(CrippleDmg.Thresholds) do
         if v.h == hp then
             table.remove(CrippleDmg.Thresholds, i)
+            return
         end
     end
 end
@@ -61,7 +76,7 @@ CrippleDmg.GetThresholdForPly = function(ply)
         comparison = ply:Health()
     end
 
-    for i,v in ipairs(CrippleDmg.Thresholds) do
+    for i, v in ipairs(CrippleDmg.Thresholds) do
         if comparison <= v.h then
             return v.m
         end

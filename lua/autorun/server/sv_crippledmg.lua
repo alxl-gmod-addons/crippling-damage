@@ -7,11 +7,11 @@ cvars.AddChangeCallback("crippledmg_enable", function()
     enabled = GetConVar("crippledmg_enable"):GetBool()
 
     if not enabled then
-        CrippleDmg.resetAllPlayers()
+        ResetAllPlayers()
     end
 end)
 
-hook.Add("PostPlayerDeath", "StoppingPowerDeathReset", function(ply)
+hook.Add("PostPlayerDeath", "CrippleDmgDeathReset", function(ply)
     if enabled then
         ply:ResetCrippleDmgSpeedMult()
     end
@@ -23,7 +23,7 @@ cvars.AddChangeCallback("crippledmg_tick_time", function()
 end)
 
 local lastTick = 0.0
-hook.Add("Tick", "StoppingPowerRecovery", function()
+hook.Add("Tick", "CrippleDmgMult", function()
     if enabled then
         local delta = CurTime() - lastTick
 
@@ -39,12 +39,12 @@ hook.Add("Tick", "StoppingPowerRecovery", function()
     end
 end)
 
-CrippleDmg.resetAllPlayers = function()
+local function ResetAllPlayers()
     for _, ply in ipairs(player.GetAll()) do
         ply:ResetCrippleDmgSpeedMult()
     end
 end
 
 concommand.Add("crippledmg_reset_all_players", function(ply, cmd, args)
-    CrippleDmg.resetAllPlayers()
+    ResetAllPlayers()
 end)
