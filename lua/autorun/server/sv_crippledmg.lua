@@ -1,5 +1,11 @@
 CrippleDmg = CrippleDmg or {}
 
+local function ResetAllPlayers()
+    for _, ply in ipairs(player.GetAll()) do
+        ply:ResetCrippleDmgSpeedMult()
+    end
+end
+
 CreateConVar("crippledmg_enable", 1, FCVAR_NOTIFY,
     "When 1, players slow down at specified health thresholds. Turn off with 0.", 0, 1)
 local enabled = GetConVar("crippledmg_enable"):GetBool()
@@ -38,12 +44,6 @@ hook.Add("Tick", "CrippleDmgMult", function()
         end
     end
 end)
-
-local function ResetAllPlayers()
-    for _, ply in ipairs(player.GetAll()) do
-        ply:ResetCrippleDmgSpeedMult()
-    end
-end
 
 concommand.Add("crippledmg_reset_all_players", function(ply, cmd, args)
     ResetAllPlayers()
