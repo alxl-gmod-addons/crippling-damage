@@ -119,15 +119,13 @@ CrippleDmg.LoadThresholds = function()
                 print("CRIPPLING DAMAGE: error loading threshold file " .. floc .. " on line " .. i)
             end
         end
-        CrippleDmg.SortThresholds()
     else
         print("CRIPPLING DAMAGE: file " .. floc .. " not found, using default threshold values")
         CrippleDmg.SetThreshold(15, 0.33)
         CrippleDmg.SetThreshold(40, 0.66)
-
-        CrippleDmg.SortThresholds()
         CrippleDmg.SaveThresholds()
     end
+    CrippleDmg.SortThresholds()
 end
 
 CrippleDmg.SaveThresholds = function()
