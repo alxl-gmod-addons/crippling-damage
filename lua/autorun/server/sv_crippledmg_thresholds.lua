@@ -62,6 +62,13 @@ CrippleDmg.DeleteThreshold = function(hp)
     end
 end
 
+CrippleDmg.ClearThresholds = function()
+    local ct = #CrippleDmg.Thresholds
+    for i=ct, 1, -1 do
+        table.remove(CrippleDmg.Thresholds, i)
+    end
+end
+
 CrippleDmg.SortThresholds = function()
     table.sort(CrippleDmg.Thresholds, function(a, b)
         return a.h < b.h
@@ -88,9 +95,9 @@ end
 
 CrippleDmg.LoadThresholds = function()
     local floc = GetConVar("crippledmg_file"):GetString()
-    local validFile = file.Exists(floc, "DATA")
 
-    if validFile then
+    CrippleDmg.ClearThresholds();
+    if file.Exists(floc, "DATA") then
         local fileLines = string.Explode("\n", file.Read(floc, "DATA"))
         for i, l in pairs(fileLines) do
             local data = string.Explode(":", string.gsub(l, "%s+", ""))
@@ -112,17 +119,14 @@ CrippleDmg.LoadThresholds = function()
                 print("CRIPPLING DAMAGE: error loading threshold file " .. floc .. " on line " .. i)
             end
         end
-    end
-
-    if not validFile then
+        CrippleDmg.SortThresholds()
+    else
         print("CRIPPLING DAMAGE: file " .. floc .. " not found, using default threshold values")
         CrippleDmg.SetThreshold(15, 0.33)
         CrippleDmg.SetThreshold(40, 0.66)
 
         CrippleDmg.SortThresholds()
         CrippleDmg.SaveThresholds()
-    else
-        CrippleDmg.SortThresholds()
     end
 end
 
